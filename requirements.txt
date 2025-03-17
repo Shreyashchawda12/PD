@@ -1,0 +1,11 @@
+pymongo[srv] 
+pymongo 
+pandas
+numpy
+python-dotenv
+certifi
+openpyxl
+streamlit
+xlsxwriter
+matplotlib
+seaborn
