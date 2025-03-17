@@ -1,11 +1,11 @@
-pymongo[srv] 
-pymongo 
+#pymongo[srv] 
+#pymongo 
 pandas
 numpy
-python-dotenv
-certifi
+#python-dotenv
+#certifi
 openpyxl
 streamlit
 xlsxwriter
-matplotlib
-seaborn
+#matplotlib
+#seaborn
