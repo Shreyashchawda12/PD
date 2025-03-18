@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 
 # PD Data File Path
-PD_FILE_PATH = 'VIL PD Alarm - Final (2).xlsx'
+PD_FILE_PATH = 'artifacts/VIL_PD_Alarm_Final.xlsx'
 
 @st.cache_data(ttl=0)
 def load_pd_data(file_path):
@@ -24,16 +24,27 @@ def main():
     # Load PD data
     df1 = load_pd_data(PD_FILE_PATH)
 
+    # Ensure '2025 PD Count' column exists
+    if '2025 PD Count' not in df1.columns:
+        st.error("⚠️ '2025 PD Count' column not found in data. Please check the file.")
+        return
+
     # Filter PD data where '2025 PD Count' is not blank
     pd_data = df1[df1['2025 PD Count'].notna() & (df1['2025 PD Count'] != '')]
 
     if not pd_data.empty:
         # Step 1: Select Cluster
         pd_cluster_options = sorted(pd_data['Cluster'].dropna().unique())
+        if not pd_cluster_options:
+            st.warning("No Cluster data available.")
+            return
         selected_pd_cluster = st.selectbox("Select Cluster for PD Data", pd_cluster_options)
 
         # Step 2: Select CE based on Cluster
         pd_ce_options = sorted(pd_data[pd_data['Cluster'] == selected_pd_cluster]['CE'].dropna().unique())
+        if not pd_ce_options:
+            st.warning("No CE data available for selected cluster.")
+            return
         selected_pd_ce = st.selectbox("Select CE for PD Data", pd_ce_options)
 
         # Step 3: Filter data based on Cluster and CE
@@ -41,8 +52,12 @@ def main():
 
         # Step 4: Select Site
         st.write("Filtered PD Data")
-        pd_display_columns = ["Site ID", "Global ID", "Site Name", "Cluster", "CE", "RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT", "Jan-25", "Feb-25", "Mar-25", "2025 PD Count"]
+        pd_display_columns = ["Global ID", "Site Name", "Cluster", "CE", "RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT", "Jan-25", "Feb-25", "Mar-25", "2025 PD Count"]
         st.dataframe(filtered_pd_data[pd_display_columns], width=1600)
+
+        if filtered_pd_data.empty:
+            st.warning("No sites available for the selected Cluster and CE.")
+            return
 
         selected_site = st.selectbox("Select Site Name to Update", filtered_pd_data["Site Name"].unique())
 
@@ -64,12 +79,12 @@ def main():
         if st.button("Update PD Data"):
             df1.loc[df1["Site Name"] == selected_site, ["RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT"]] = [RCA1, RCA2, action_plan, status, closure_date_tat]
             df1.to_excel(PD_FILE_PATH, index=False)
-            st.success("PD Data updated successfully.")
+            st.success(f"✅ PD Data updated for {selected_site}. Refresh to see changes.")
 
         # Download button for updated PD data
         excel_data = to_excel(df1)
         st.sidebar.download_button(
-            label="Download Modified PD Excel File",
+            label="📥 Download Modified PD Excel File",
             data=excel_data,
             file_name="modified_PD_data.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
