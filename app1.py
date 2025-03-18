@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 
 # PD Data File Path
-PD_FILE_PATH = 'artifacts/VIL PD Alarm - Final (2).xlsx'
+PD_FILE_PATH = 'VIL PD Alarm - Final (2).xlsx'
 
 @st.cache_data(ttl=0)
 def load_pd_data(file_path):
