@@ -31,7 +31,7 @@ def main():
 
     # Filter PD data where '2025 PD Count' is not blank
     pd_data = df1[df1['2025 PD Count'].notna() & (df1['2025 PD Count'] != '')]
-
+    pd_data[['2025 PD Count','Jan-25','Feb-25','Mar-25']] = round(pd_data[['2025 PD Count','Jan-25','Feb-25','Mar-25']],0) 
     if not pd_data.empty:
         # Step 1: Select Cluster
         pd_cluster_options = sorted(pd_data['Cluster'].dropna().unique())
