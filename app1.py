@@ -52,7 +52,7 @@ def main():
 
         # Step 4: Select Site
         st.write("Filtered PD Data")
-        pd_display_columns = ["Global ID", "Site Name", "Cluster", "CE", "RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT", "Jan-25", "Feb-25", "Mar-25", "2025 PD Count"]
+        pd_display_columns = ["Global ID", "Site Name", "Cluster", "CE", "RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT", "Jan-25", "Feb-25", "Mar-25","Apr-25", "2025 PD Count"]
         st.dataframe(filtered_pd_data[pd_display_columns], width=1600)
 
         if filtered_pd_data.empty:
