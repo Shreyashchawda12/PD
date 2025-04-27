@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 
 # PD Data File Path
-PD_FILE_PATH = 'artifacts/VIL_PD_Alarm_Final.xlsx'
+PD_FILE_PATH = 'artifacts/VIL_PD_Alarm_Final_Apr.xlsx'
 
 @st.cache_data(ttl=0)
 def load_pd_data(file_path):
@@ -80,6 +80,7 @@ def main():
             df1.loc[df1["Site Name"] == selected_site, ["RCA-1", "RCA-2", "Action Plan", "Status", "Closure Date/TAT"]] = [RCA1, RCA2, action_plan, status, closure_date_tat]
             df1.to_excel(PD_FILE_PATH, index=False)
             st.success(f"✅ PD Data updated for {selected_site}. Refresh to see changes.")
+            st.experimental_rerun()
 
         # Download button for updated PD data
         excel_data = to_excel(df1)
